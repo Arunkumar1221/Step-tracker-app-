@@ -61,26 +61,23 @@
       background-color: #0056b3;
     }
 
-    .multiplier {
+    .danger {
+      background-color: #dc3545;
+    }
+
+    .danger:hover {
+      background-color: #a71d2a;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .note {
       margin-top: 20px;
       font-size: 14px;
       color: #555;
-    }
-
-    .github-link {
-      margin-top: 30px;
-    }
-
-    .github-link a {
-      color: #007bff;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .permission-warning {
-      margin-top: 15px;
-      font-size: 14px;
-      color: #e67e22;
     }
   </style>
 </head>
@@ -97,17 +94,17 @@
 
     <!-- Start Auto Step Counter -->
     <button onclick="startAutoSteps()">Start</button>
-    <button onclick="stopAutoSteps()" style="background-color: #dc3545;">Stop</button>
+    <button onclick="stopAutoSteps()" class="danger">Stop</button>
 
-    <!-- System Permission Warning -->
-    <div class="permission-warning" id="permissionWarning"></div>
-    <button onclick="requestSettingsPermission()">Allow Settings Modification</button>
+    <!-- Request Activity Recognition Permission -->
+    <div class="status" id="activityPermissionStatus">Activity permission: Not requested</div>
+    <button onclick="requestActivityPermission()">Request Activity Tracking</button>
 
-    <div class="multiplier">Note: This app may show 2-5x the actual steps for personal estimation purposes.</div>
-  </div>
+    <!-- Set as Default System App -->
+    <div class="status" id="defaultAppStatus">Default app status: Not set</div>
+    <button onclick="setDefaultApp()">Set as Default Step Tracker</button>
 
-  <div class="github-link">
-    Source Code: <a href="https://github.com/yourusername/step-tracker"  target="_blank">GitHub Repository</a>
+    <div class="note">Note: This app may show 2-5x the actual steps for personal estimation purposes.</div>
   </div>
 
   <script>
@@ -143,13 +140,25 @@
       autoStepInterval = null;
     }
 
-    function requestSettingsPermission() {
-      // Simulate asking for permission to modify system settings
-      const granted = confirm("This app requests permission to modify system settings for enhanced functionality.\n\nDo you allow this?");
+    function requestActivityPermission() {
+      const granted = confirm("This app needs permission to access physical activity data.\n\nAllow access?");
       if (granted) {
-        document.getElementById('permissionWarning').innerText = "Permission granted.";
+        document.getElementById('activityPermissionStatus').innerText = "Activity permission: Granted";
+        document.getElementById('activityPermissionStatus').style.color = "green";
       } else {
-        document.getElementById('permissionWarning').innerText = "Permission denied. Some features may be limited.";
+        document.getElementById('activityPermissionStatus').innerText = "Activity permission: Denied";
+        document.getElementById('activityPermissionStatus').style.color = "red";
+      }
+    }
+
+    function setDefaultApp() {
+      const confirmed = confirm("Do you want to set this app as the default system step tracker?");
+      if (confirmed) {
+        document.getElementById('defaultAppStatus').innerText = "Default app status: Yes";
+        document.getElementById('defaultAppStatus').style.color = "green";
+      } else {
+        document.getElementById('defaultAppStatus').innerText = "Default app status: No";
+        document.getElementById('defaultAppStatus').style.color = "red";
       }
     }
   </script>
