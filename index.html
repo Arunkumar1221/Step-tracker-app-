@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Step Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .step-container {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .steps {
+      font-size: 72px;
+      font-weight: bold;
+      color: #007bff;
+      margin: 20px 0;
+    }
+
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 80%;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 5px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .multiplier {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .github-link {
+      margin-top: 30px;
+    }
+
+    .github-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .permission-warning {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #e67e22;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Step Tracker</h1>
+  <div class="step-container">
+    <p><strong>Steps (Estimated)</strong></p>
+    <div class="steps" id="stepCount">0</div>
+
+    <!-- Manual Sync -->
+    <input type="number" id="manualSteps" placeholder="Enter steps manually" />
+    <button onclick="syncManualSteps()">Sync Steps</button>
+
+    <!-- Start Auto Step Counter -->
+    <button onclick="startAutoSteps()">Start</button>
+    <button onclick="stopAutoSteps()" style="background-color: #dc3545;">Stop</button>
+
+    <!-- System Permission Warning -->
+    <div class="permission-warning" id="permissionWarning"></div>
+    <button onclick="requestSettingsPermission()">Allow Settings Modification</button>
+
+    <div class="multiplier">Note: This app may show 2-5x the actual steps for personal estimation purposes.</div>
+  </div>
+
+  <div class="github-link">
+    Source Code: <a href="https://github.com/yourusername/step-tracker"  target="_blank">GitHub Repository</a>
+  </div>
+
+  <script>
+    let stepCount = 0;
+    let autoStepInterval = null;
+
+    function updateDisplay() {
+      document.getElementById('stepCount').innerText = stepCount.toLocaleString();
+    }
+
+    function syncManualSteps() {
+      const input = document.getElementById('manualSteps');
+      const value = parseInt(input.value);
+      if (!isNaN(value) && value >= 0) {
+        stepCount = value;
+        updateDisplay();
+        input.value = '';
+      } else {
+        alert("Please enter a valid number of steps.");
+      }
+    }
+
+    function startAutoSteps() {
+      if (autoStepInterval) return; // Prevent multiple starts
+      autoStepInterval = setInterval(() => {
+        stepCount++;
+        updateDisplay();
+      }, 1000); // Add 1 step per second
+    }
+
+    function stopAutoSteps() {
+      clearInterval(autoStepInterval);
+      autoStepInterval = null;
+    }
+
+    function requestSettingsPermission() {
+      // Simulate asking for permission to modify system settings
+      const granted = confirm("This app requests permission to modify system settings for enhanced functionality.\n\nDo you allow this?");
+      if (granted) {
+        document.getElementById('permissionWarning').innerText = "Permission granted.";
+      } else {
+        document.getElementById('permissionWarning').innerText = "Permission denied. Some features may be limited.";
+      }
+    }
+  </script>
+
+</body>
+</html>
